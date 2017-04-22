@@ -51,3 +51,12 @@ typedef struct BiTNode /*结点结构*/
 	struct BiTNode *lchild, *rchild;
 }BiTNode, *BiTree;
 
+/* 二叉树的二叉线索存储结构定义*/
+typedef enum {Link, Thread} PointerTag; //Link==0 表示指向左右孩子
+typedef struct BiThrNode  /* 二叉线索存储节点结构*/
+{
+	TElemType data;
+	struct BiThrNode *lchild, *rchild;
+	PointerTag LTag;
+	PointerTag RTag;
+}BiThrNode, *BiThrTree;
