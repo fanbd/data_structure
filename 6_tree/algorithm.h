@@ -52,3 +52,19 @@ void CreateBiTree(BiTree *T)
 		CreateBiTree(&(*T)->rchild);
 	}
 }
+
+/*T指向头结点,头结点左链lchild指向根节点,头结点右链rchild指向中序遍历的最后一个结点。中序遍历二叉树线索链表表示的二叉树T */
+
+Status InOrderTraverse_Thr(BiThrTree T)
+{
+	BiThrTree p;
+	p = T->lchild;
+	while (p != T)
+	{
+		while (p->LTag == Link)
+			p = p->lchild;
+		printf ("%c", p->data);
+		while (p->RTag == Thread && p->rchild != T)
+
+	}
+}
