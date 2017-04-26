@@ -1,3 +1,4 @@
+#define int Status
 /*顺序查找, a为数组, n为要查找的数组个数, key为要查找的关键字*/
 
 int  Sequential_Search(int *a, int n, int key)
@@ -91,6 +92,7 @@ Status SearchBST(BiTree T, int key, BiTree f, BiTree *p)
 	/*
 	 可递归函数，关键点在于f 是 T 的双亲结点
 	 方便查找兄弟结点
+	 p用来接受查找成功的结点位置
 	 * */
 	if (!T)
 	{
@@ -107,14 +109,66 @@ Status SearchBST(BiTree T, int key, BiTree f, BiTree *p)
 	else
 		return SearchBST(T->rchild, key, T, p);
 }
+ Status InsertBST(BiTree *T, int key)
+{
+	BiTree p, s;
+	if (!SearchBST(*T, key, NULL, &p))
+	{//find fail also the 'key' not in the tree & insert it
+		s = (BiTree)malloc(sizeof(BiTNode));
+		s->data = key;
+		s->lchild = s->rchild = NULL;
+		if (!p)//这里的意思是T是空树
+			*T = s;
+		else if (key < p->data)
+			p->lchild = s;
+		else 
+			p->rchild = s;
+		return TRUE;
+	}
+	else
+		return FALSE;//there is already a 'key' in the tree
+}
 
+/*删除二叉排序树T中关键字等于key的元素*/
+Status DeleteBST(BiTree *T, int key)
+{
+	if (!*T)
+		return FALSE;
+	else
+	{
+		if (key == (*T)->data)
+			return Delete(T);
+		else if (key < (*T)->data)
+			return DeleteBST(&(*T)->lchild, key);
+		else
+			return DeleteBST(&(*T)->rchild, key);
+	}
+}
+Status Delete(BiTree *p)
+{//删除结点p，并重接它的左右子树
+	BiTree q, s;
+	if( (*p)->rchild == NULL)	//右子树空则只需重接左子树
+	{
+		q=*p; *p=(*p)->lchild; free(q);
+	}
+	else if( (*p)->lchild == NULL)	//左子树空则只需重接右子树
+	{
+		q=*p; *p=(*p)->rchild;	free(q);
+	}
+	else
+	{
+		q=*p;  s=(*p)->lchild;
+		while(s->rchild)	//转左，然后向右走到尽头
+		{
+			q=s;	s=s->rchild;
+		}
+		(*p)->data = s->data;	//s指向被删结点的直接前驱
+		if (q!=*p)
+			q->rchild = s->lchild;	//重接q的右子树
+		else
+			q->lchild=s->lchild;	//重接q的左子树
+		free(s);
+	}
 
-
-
-
-
-
-
-
-
-
+	return TRUE;
+}
